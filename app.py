@@ -1,10 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for
-
 from forms import TodoForm
-from models import todos
-
+from models import Todos
+import sqlite3
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
+todos = Todos()
 
 @app.route("/todos/", methods=["GET", "POST"])
 def todos_list():
@@ -33,3 +33,19 @@ def todo_details(todo_id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+    conn = sqlite3.connect("data.db")
+    c = conn.cursor()
+
+    test_form = TodoForm()
+
+    c.execute("""CREATE TABLE IF NOT EXISTS todos (
+        tilte text NOT NULL,
+        description text NOT NULL,
+        done text NOT NULL
+    );""")
+
+    sql = """INSERT INTO todos (name, surname, average_grade, school_year)
+    VALUES ('Superman', 'horror', 'yes');
+    """
+
+    print(c.fetchall())
